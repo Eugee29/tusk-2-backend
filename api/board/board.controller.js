@@ -1,6 +1,5 @@
 const boardService = require('./board.service.js')
 const logger = require('../../services/logger.service')
-const socketService = require('../../services/socket.service')
 
 // GET LIST
 async function getBoards(req, res) {
@@ -10,7 +9,7 @@ async function getBoards(req, res) {
     const boards = await boardService.query(JSON.parse(queryParams.filterBy))
     res.json(boards)
   } catch (err) {
-    logger.error('Failed to get boards', err)
+    logger.error('Cannot find boards:\n', err)
     res.status(500).send({ err: 'Failed to get boards' })
   }
 }
@@ -22,7 +21,7 @@ async function getBoardById(req, res) {
     const board = await boardService.getById(boardId)
     res.json(board)
   } catch (err) {
-    logger.error('Failed to get board', err)
+    logger.error(`Cannot find board ${boardId}:\n`, err)
     res.status(500).send({ err: 'Failed to get board' })
   }
 }
@@ -32,10 +31,9 @@ async function addBoard(req, res) {
   try {
     const board = req.body
     const addedBoard = await boardService.add(board)
-    // res.json(addedBoard)
     res.send(addedBoard)
   } catch (err) {
-    logger.error('Failed to add board', err)
+    logger.error(`Cannot add board:\n`, err)
     res.status(500).send({ err: 'Failed to add board' })
   }
 }
@@ -46,9 +44,8 @@ async function updateBoard(req, res) {
     const board = req.body
     const updatedBoard = await boardService.update(board)
     res.json(updatedBoard)
-    // socketService.broadcast({type: 'board-edited', data: board, userId: board._id})
   } catch (err) {
-    logger.error('Failed to update board', err)
+    logger.error(`Cannot update board ${board._id}:\n`, err)
     res.status(500).send({ err: 'Failed to update board' })
   }
 }
@@ -60,7 +57,7 @@ async function removeBoard(req, res) {
     const removedId = await boardService.remove(boardId)
     res.send(removedId)
   } catch (err) {
-    logger.error('Failed to remove board', err)
+    logger.error(`Cannot remove board ${boardId}:\n`, err)
     res.status(500).send({ err: 'Failed to remove board' })
   }
 }

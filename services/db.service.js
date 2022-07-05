@@ -5,7 +5,6 @@ module.exports = {
   getCollection,
 }
 
-// Database Name
 const dbName = 'tusk_db'
 
 var dbConn = null

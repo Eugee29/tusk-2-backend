@@ -1,4 +1,4 @@
-const logger = require('./logger.service')
+// const logger = require('./logger.service')
 
 var gIo = null
 
@@ -9,17 +9,16 @@ function setupSocketAPI(http) {
     },
   })
   gIo.on('connection', (socket) => {
-    logger.info(`New connected socket [id: ${socket.id}]`)
+    // logger.info(`New connected socket [id: ${socket.id}]`)
 
-    socket.on('disconnect', (socket) => {
-      logger.info(`Socket disconnected [id: ${socket.id}]`)
-    })
+    // socket.on('disconnect', (socket) => {
+    //   logger.info(`Socket disconnected [id: ${socket.id}]`)
+    // })
 
     socket.on('listen-to-board', (topic) => {
       if (socket.myTopic === topic) return
       if (socket.myTopic) {
         socket.leave(socket.myTopic)
-        logger.info(`Socket is leaving board ${socket.myTopic} [id: ${socket.id}]`)
       }
       socket.join(topic)
       socket.myTopic = topic
