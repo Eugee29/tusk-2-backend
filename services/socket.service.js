@@ -19,22 +19,17 @@ function setupSocketAPI(http) {
       if (socket.myTopic === topic) return
       if (socket.myTopic) {
         socket.leave(socket.myTopic)
-        logger.info(
-          `Socket is leaving board ${socket.myTopic} [id: ${socket.id}]`
-        )
+        logger.info(`Socket is leaving board ${socket.myTopic} [id: ${socket.id}]`)
       }
       socket.join(topic)
       socket.myTopic = topic
     })
 
-    socket.on('leave-board', (topic) => {
-      socket.leave(topic)
-    })
+    // socket.on('leave-board', (topic) => {
+    //   socket.leave(topic)
+    // })
 
     socket.on('board-activity', (board) => {
-      logger.info(
-        `New board activity by socket [id: ${socket.id}], in board ${socket.myTopic}`
-      )
       socket.broadcast.to(socket.myTopic).emit('board-activity', board)
     })
   })
