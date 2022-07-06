@@ -5,10 +5,7 @@ async function login(req, res) {
   const { username, password } = req.body
   try {
     const user = await authService.login(username, password)
-    // const loginToken = authService.getLoginToken(user)
     logger.info('User login:\n', user)
-    // res.cookie('loginToken', loginToken)
-
     res.json(user)
   } catch (err) {
     logger.error('Failed to Login:\n', err)
@@ -22,10 +19,6 @@ async function signup(req, res) {
     const account = await authService.signup(username, password, fullname)
     logger.info(`New account created:\n` + JSON.stringify(account))
     const user = await authService.login(username, password)
-    // const loginToken = authService.getLoginToken(user)
-    // logger.info('User login: ', user)
-    // res.cookie('loginToken', loginToken)
-
     res.json(user)
   } catch (err) {
     logger.error('Failed to signup:\n', err)
@@ -35,7 +28,6 @@ async function signup(req, res) {
 
 async function logout(req, res) {
   try {
-    // res.clearCookie('loginToken')
     res.send({ msg: 'Logged out successfully' })
   } catch (err) {
     logger.error('Failed to logout:\n', err)

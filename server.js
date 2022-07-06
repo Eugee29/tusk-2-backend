@@ -1,12 +1,10 @@
 const express = require('express')
-// const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const path = require('path')
 
 const app = express()
 const http = require('http').createServer(app)
 
-// app.use(cookieParser())
 app.use(express.json())
 
 if (process.env.NODE_ENV === 'production') {
@@ -24,9 +22,6 @@ const userRoutes = require('./api/user/user.routes')
 const boardRoutes = require('./api/board/board.routes')
 
 const { setupSocketAPI } = require('./services/socket.service')
-
-// const setupAsyncLocalStorage = require('./middlewares/setupAls.middleware')
-// app.all('*', setupAsyncLocalStorage)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)

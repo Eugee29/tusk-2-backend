@@ -1,21 +1,18 @@
 const dbService = require('../../services/db.service')
-const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
 
 module.exports = {
   query,
   getById,
   getByUsername,
-  // remove,
   update,
   add,
 }
 
-async function query(/*filterBy = {}*/) {
-  // const criteria = _buildCriteria(filterBy)
+async function query() {
   try {
     const collection = await dbService.getCollection('user')
-    var users = await collection.find(/*criteria*/).toArray()
+    var users = await collection.find().toArray()
     users = users.map((user) => {
       delete user.password
       user.createdAt = ObjectId(user._id).getTimestamp()
@@ -48,16 +45,6 @@ async function getByUsername(username) {
   }
 }
 
-// async function remove(userId) {
-//   try {
-//     const collection = await dbService.getCollection('user')
-//     await collection.deleteOne({ _id: ObjectId(userId) })
-//   } catch (err) {
-//     logger.error(`cannot remove user ${userId}`, err)
-//     throw err
-//   }
-// }
-
 async function update(user) {
   try {
     const userToSave = {
@@ -67,7 +54,6 @@ async function update(user) {
     }
 
     const collection = await dbService.getCollection('user')
-    console.log('user', user)
     await collection.updateOne({ _id: userToSave._id }, { $set: userToSave })
     return userToSave
   } catch (err) {
@@ -82,7 +68,6 @@ async function add(user) {
       password: user.password,
       fullname: user.fullname,
       imgURL: '',
-      isAdmin: false,
     }
     const collection = await dbService.getCollection('user')
     await collection.insertOne(userToAdd)
@@ -91,22 +76,3 @@ async function add(user) {
     throw err
   }
 }
-
-// function _buildCriteria(filterBy) {
-//   const criteria = {}
-//   if (filterBy.txt) {
-//     const txtCriteria = { $regex: filterBy.txt, $options: 'i' }
-//     criteria.$or = [
-//       {
-//         username: txtCriteria,
-//       },
-//       {
-//         fullname: txtCriteria,
-//       },
-//     ]
-//   }
-//   if (filterBy.minBalance) {
-//     criteria.balance = { $gte: filterBy.minBalance }
-//   }
-//   return criteria
-// }
